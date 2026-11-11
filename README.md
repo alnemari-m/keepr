@@ -13,6 +13,7 @@
   <img alt="C++20" src="https://img.shields.io/badge/C%2B%2B-20-blue">
   <img alt="Qt 6" src="https://img.shields.io/badge/GUI-Qt%206-41cd52">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Linux-lightgrey">
+  <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow">
 </p>
 
 <p align="center">
@@ -136,3 +137,7 @@ src/util.*          UTF-8/UTF-16, escaping, slugs
 gui/                Qt 6 desktop app, icon, .desktop entry
 tests/              unit tests and a synthetic article fixture
 ```
+
+## License
+
+[MIT](LICENSE) © 2026 Mohammed Alnemari
