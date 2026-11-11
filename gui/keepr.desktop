@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Keepr
+GenericName=Video & Article Downloader
+Comment=Download videos (X, TikTok, YouTube…) and archive X Articles
+Exec=keepr-gui %U
+Icon=keepr
+Terminal=false
+Categories=Network;AudioVideo;Utility;
+Keywords=download;video;tiktok;twitter;x;youtube;article;

@@ -1,0 +1,4 @@
+build/
+downloads/
+compile_commands.json
+.omc/

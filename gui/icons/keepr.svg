@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e2a4a"/>
+      <stop offset="1" stop-color="#0d1426"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#ff5e62"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- tile -->
+  <rect x="12" y="12" width="232" height="232" rx="54" fill="url(#tile)"/>
+  <rect x="12" y="12" width="232" height="232" rx="54" fill="url(#gloss)"/>
+  <!-- saved pages behind the bookmark -->
+  <rect x="62" y="56" width="112" height="140" rx="14" fill="#ffffff" fill-opacity="0.10" transform="rotate(-8 118 126)"/>
+  <!-- bookmark: "keep" -->
+  <path d="M82 46 H174 Q186 46 186 58 V212 L128 176 L70 212 V58 Q70 46 82 46 Z" fill="url(#mark)"/>
+  <!-- play triangle -->
+  <path d="M112 86 L156 112 L112 138 Z" fill="#ffffff"/>
+</svg>

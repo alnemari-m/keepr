@@ -1,0 +1,51 @@
+{
+  "code": 200,
+  "tweet": {
+    "url": "https://x.com/tester/status/111",
+    "id": "111",
+    "lang": "en",
+    "created_at": "Mon Jan 05 10:00:00 +0000 2026",
+    "author": {"name": "Test Author", "screen_name": "tester"},
+    "article": {
+      "id": "999",
+      "title": "Hello *World*: a test",
+      "created_at": "2026-01-05T10:00:00.000Z",
+      "cover_media": {"media_info": {"__typename": "ApiImage", "original_img_url": "https://pbs.twimg.com/media/COVER.jpg"}},
+      "media_entities": [
+        {"media_id": "m1", "media_info": {"__typename": "ApiImage", "original_img_url": "https://pbs.twimg.com/media/IMG1.png"}},
+        {"media_id": "m2", "media_info": {"__typename": "ApiVideo", "variants": [
+          {"content_type": "application/x-mpegURL", "url": "https://video.twimg.com/x.m3u8"},
+          {"content_type": "video/mp4", "bit_rate": 256000, "url": "https://video.twimg.com/low.mp4"},
+          {"content_type": "video/mp4", "bit_rate": 2176000, "url": "https://video.twimg.com/high.mp4"}]}}
+      ],
+      "content": {
+        "entityMap": [
+          {"key": "0", "value": {"type": "LINK", "data": {"url": "https://example.com"}}},
+          {"key": "1", "value": {"type": "MEDIA", "data": {"caption": "A caption", "mediaItems": [{"mediaId": "m1"}]}}},
+          {"key": "2", "value": {"type": "MARKDOWN", "data": {"markdown": "```cpp\nint main() { return a < b; }\n```"}}},
+          {"key": "3", "value": {"type": "DIVIDER", "data": {}}},
+          {"key": "4", "value": {"type": "LATEX", "data": {"markdown": "E = mc^2"}}},
+          {"key": "5", "value": {"type": "MARKDOWN", "data": {"markdown": "| A | B |\n| --- | --- |\n| 1 | 2 |"}}},
+          {"key": "6", "value": {"type": "MEDIA", "data": {"mediaItems": [{"mediaId": "m2"}]}}}
+        ],
+        "blocks": [
+          {"key": "a", "type": "unstyled", "text": "😀 bold link here", "inlineStyleRanges": [{"offset": 3, "length": 4, "style": "Bold"}], "entityRanges": [{"key": 0, "offset": 8, "length": 4}], "data": {}},
+          {"key": "b", "type": "header-two", "text": "Section", "inlineStyleRanges": [], "entityRanges": [], "data": {}},
+          {"key": "c", "type": "unordered-list-item", "text": "one", "inlineStyleRanges": [], "entityRanges": [], "data": {}},
+          {"key": "d", "type": "unordered-list-item", "text": "nested", "depth": 1, "inlineStyleRanges": [], "entityRanges": [], "data": {}},
+          {"key": "e", "type": "ordered-list-item", "text": "first", "inlineStyleRanges": [], "entityRanges": [], "data": {}},
+          {"key": "f", "type": "ordered-list-item", "text": "second", "inlineStyleRanges": [], "entityRanges": [], "data": {}},
+          {"key": "g", "type": "atomic", "text": " ", "inlineStyleRanges": [], "entityRanges": [{"key": 1, "offset": 0, "length": 1}], "data": {}},
+          {"key": "h", "type": "atomic", "text": " ", "inlineStyleRanges": [], "entityRanges": [{"key": 2, "offset": 0, "length": 1}], "data": {}},
+          {"key": "i", "type": "atomic", "text": " ", "inlineStyleRanges": [], "entityRanges": [{"key": 3, "offset": 0, "length": 1}], "data": {}},
+          {"key": "j", "type": "atomic", "text": " ", "inlineStyleRanges": [], "entityRanges": [{"key": 4, "offset": 0, "length": 1}], "data": {}},
+          {"key": "k", "type": "atomic", "text": " ", "inlineStyleRanges": [], "entityRanges": [{"key": 5, "offset": 0, "length": 1}], "data": {}},
+          {"key": "l", "type": "atomic", "text": " ", "inlineStyleRanges": [], "entityRanges": [{"key": 6, "offset": 0, "length": 1}], "data": {}},
+          {"key": "m", "type": "blockquote", "text": "quoted", "inlineStyleRanges": [], "entityRanges": [], "data": {}},
+          {"key": "n", "type": "unstyled", "text": "ask @someone", "inlineStyleRanges": [], "entityRanges": [], "data": {"mentions": [{"fromIndex": 4, "toIndex": 12, "text": "someone"}]}},
+          {"key": "o", "type": "unstyled", "text": "مرحبا بالعالم", "inlineStyleRanges": [{"offset": 6, "length": 7, "style": "Italic"}], "entityRanges": [], "data": {}}
+        ]
+      }
+    }
+  }
+}
