@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/alnemari-m/keepr/actions/workflows/build.yml"><img alt="Build" src="https://github.com/alnemari-m/keepr/actions/workflows/build.yml/badge.svg"></a>
   <img alt="C++20" src="https://img.shields.io/badge/C%2B%2B-20-blue">
   <img alt="Qt 6" src="https://img.shields.io/badge/GUI-Qt%206-41cd52">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Linux-lightgrey">
