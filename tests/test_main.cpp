@@ -66,6 +66,22 @@ static void test_ytdlp_argv() {
   bool mp3 = false;
   for (auto& s : a) mp3 = mp3 || s == "mp3";
   CHECK(mp3);
+  CHECK(mg::clip_section("1:00") == "*0-1:00");
+  CHECK(mg::clip_section("2:30-3:30") == "*2:30-3:30");
+  CHECK(mg::clip_section("90-inf") == "*90-inf");
+  CHECK(!mg::clip_section("") && !mg::clip_section("abc") && !mg::clip_section("1:00-") && !mg::clip_section("--exec"));
+  o = {};
+  o.clip = *mg::clip_section("60");
+  a = mg::ytdlp_argv("u", "t", o);
+  bool sec = false;
+  for (size_t i = 0; i + 1 < a.size(); ++i) sec = sec || (a[i] == "--download-sections" && a[i + 1] == "*0-60");
+  CHECK(sec);
+  o = {};
+  o.pace = true;
+  a = mg::ytdlp_argv("u", "t", o);
+  bool slp = false;
+  for (auto& s : a) slp = slp || s == "--sleep-interval";
+  CHECK(slp);
 }
 
 static void test_image_ref() {

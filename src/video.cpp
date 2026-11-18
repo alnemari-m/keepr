@@ -6,6 +6,7 @@
 #include <cerrno>
 #include <cstring>
 #include <iostream>
+#include <regex>
 
 extern char** environ;
 
@@ -18,6 +19,15 @@ std::string ytdlp_escape_path(const std::filesystem::path& p) {
     if (c == '%') out.push_back('%');
   }
   return out;
+}
+
+std::optional<std::string> clip_section(const std::string& range) {
+  static const std::regex time(R"(\d+(:\d{1,2}){0,2}(\.\d+)?)");
+  auto dash = range.find('-');
+  if (dash == std::string::npos) return std::regex_match(range, time) ? std::optional("*0-" + range) : std::nullopt;
+  std::string from = range.substr(0, dash), to = range.substr(dash + 1);
+  if (!std::regex_match(from, time) || (to != "inf" && !std::regex_match(to, time))) return std::nullopt;
+  return "*" + range;
 }
 
 std::vector<std::string> ytdlp_argv(const std::string& url, const std::filesystem::path& out_template,
@@ -36,6 +46,10 @@ std::vector<std::string> ytdlp_argv(const std::string& url, const std::filesyste
   if (!opt.cookies_file.empty()) a.insert(a.end(), {"--cookies", opt.cookies_file});
   if (opt.write_subs) a.insert(a.end(), {"--write-subs", "--write-auto-subs", "--sub-langs", "en.*,ar.*"});
   if (opt.write_info_json) a.push_back("--write-info-json");
+  // yt-dlp's own recommended pacing (its "-t sleep" preset, spelled out so older yt-dlp works too)
+  if (opt.pace) a.insert(a.end(), {"--sleep-requests", "0.75", "--sleep-interval", "10", "--max-sleep-interval", "20"});
+  // shortcut: cuts land on keyframes (may be a few seconds off), add --force-keyframes-at-cuts if exact cuts matter (re-encodes, slow)
+  if (!opt.clip.empty()) a.insert(a.end(), {"--download-sections", opt.clip});
   a.insert(a.end(), opt.extra_args.begin(), opt.extra_args.end());
   a.push_back("--");  // url can never be parsed as an option
   a.push_back(url);

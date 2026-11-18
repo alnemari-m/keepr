@@ -12,6 +12,7 @@ class QListWidgetItem;
 class QPlainTextEdit;
 class QProgressBar;
 class QPushButton;
+class PreviewPane;
 
 // Front end for the `keepr` command-line engine. Each URL runs as its own
 // child process so output streams live into the log and Cancel can stop it.
@@ -50,6 +51,7 @@ class MainWindow : public QMainWindow {
   QStringList parseUrls() const;
   QString engineCommand() const;
   QString ytdlpPath() const;
+  void refreshPreview();
 
   // widgets
   QPlainTextEdit* urlsEdit_;
@@ -57,6 +59,7 @@ class MainWindow : public QMainWindow {
   QComboBox* qualityCombo_;
   QComboBox* formatCombo_;
   QCheckBox* audioCheck_;
+  QLineEdit* clipEdit_;
   QCheckBox* mediaCheck_;
   QPushButton* downloadBtn_;
   QPushButton* cancelBtn_;
@@ -64,6 +67,7 @@ class MainWindow : public QMainWindow {
   QLabel* status_;
   QListWidget* results_;
   QPlainTextEdit* log_;
+  PreviewPane* preview_ = nullptr;  // stays null when built without Qt Multimedia
 
   // run state
   QProcess* proc_ = nullptr;

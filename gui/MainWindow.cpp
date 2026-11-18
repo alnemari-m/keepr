@@ -31,8 +31,13 @@
 #include <QSplitter>
 #include <QStandardPaths>
 #include <QStatusBar>
+#include <QTimer>
 #include <QUrl>
 #include <QVBoxLayout>
+
+#ifdef KEEPR_PREVIEW
+#include "Preview.hpp"
+#endif
 
 namespace {
 
@@ -52,7 +57,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
   buildUi();
   loadSettings();
   setBusy(false);
-  resize(860, 720);
+  resize(preview_ ? 1180 : 860, 720);
 }
 
 MainWindow::~MainWindow() {
@@ -112,6 +117,11 @@ void MainWindow::buildUi() {
   form->addRow("Video quality:", row2);
   connect(audioCheck_, &QCheckBox::toggled, qualityCombo_, &QComboBox::setDisabled);
 
+  // not saved in settings: a forgotten clip would silently truncate later downloads
+  clipEdit_ = new QLineEdit(optBox);
+  clipEdit_->setPlaceholderText("whole video — or 1:00 (first minute), 2:30-3:30");
+  form->addRow("Only this part:", clipEdit_);
+
   auto* row3 = new QHBoxLayout;
   formatCombo_ = new QComboBox(optBox);
   formatCombo_->addItem("Markdown + HTML", "both");
@@ -164,8 +174,25 @@ void MainWindow::buildUi() {
   split->setStretchFactor(0, 1);
   split->setStretchFactor(1, 2);
 
-  root->addWidget(linksBox);
-  root->addWidget(optBox);
+  auto* top = new QHBoxLayout;
+  auto* left = new QVBoxLayout;
+  left->addWidget(linksBox);
+  left->addWidget(optBox);
+  top->addLayout(left, 3);
+#ifdef KEEPR_PREVIEW
+  auto* prevBox = new QGroupBox("Preview", central);
+  auto* prevLay = new QVBoxLayout(prevBox);
+  preview_ = new PreviewPane(prevBox);
+  prevLay->addWidget(preview_);
+  top->addWidget(prevBox, 2);
+  connect(preview_, &PreviewPane::clipChosen, clipEdit_, &QLineEdit::setText);
+  auto* debounce = new QTimer(this);  // wait until typing/pasting settles before asking yt-dlp
+  debounce->setSingleShot(true);
+  debounce->setInterval(700);
+  connect(urlsEdit_, &QPlainTextEdit::textChanged, debounce, qOverload<>(&QTimer::start));
+  connect(debounce, &QTimer::timeout, this, &MainWindow::refreshPreview);
+#endif
+  root->addLayout(top);
   root->addLayout(actions);
   root->addWidget(progress_);
   root->addWidget(status_);
@@ -222,6 +249,17 @@ QString MainWindow::ytdlpPath() const {
   return {};
 }
 
+void MainWindow::refreshPreview() {
+#ifdef KEEPR_PREVIEW
+  // first link that is not an X post: those are archived as documents, not clipped
+  static const QRegularExpression xHost(R"(^(https?://)?(www\.|mobile\.)?(x|twitter)\.com/)", QRegularExpression::CaseInsensitiveOption);
+  QString url;
+  for (const QString& u : parseUrls())
+    if (!xHost.match(u).hasMatch()) { url = u; break; }
+  preview_->setUrl(url, ytdlpPath());
+#endif
+}
+
 void MainWindow::startDownloads() {
   if (proc_) return;
   QStringList urls = parseUrls();
@@ -270,6 +308,8 @@ void MainWindow::runNext() {
   int q = qualityCombo_->currentData().toInt();
   if (audioCheck_->isChecked()) args << "-a";
   else if (q > 0) args << "-q" << QString::number(q);
+  if (QString c = clipEdit_->text().trimmed(); !c.isEmpty()) args << "--clip" << c;
+  if (total_ > 1) args << "--pace";  // the CLI sees one URL per run, so it cannot tell this is a batch
   if (!mediaCheck_->isChecked()) args << "--no-media";
   args << "--format" << formatCombo_->currentData().toString();
   QString y = ytdlpPath();

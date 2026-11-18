@@ -32,7 +32,10 @@ options:
   -i, --input FILE             read URLs from FILE (one per line, # comments)
   -q, --max-height N           cap video resolution, e.g. 720 or 1080
   -a, --audio-only             extract audio as mp3
+      --clip RANGE             only part of the video: 1:00 = first minute, 2:30-3:30, 90-inf
       --playlist               follow playlists / profile pages (yt-dlp)
+      --pace                   wait 10-20 s between videos so the site does not block you
+                               (automatic with several URLs or --playlist)
       --subs                   also download subtitles
       --info-json              write yt-dlp metadata JSON
       --cookies-from-browser B pass browser cookies to yt-dlp (chromium, firefox, ...)
@@ -78,6 +81,12 @@ Args parse(int argc, char** argv) {
       try { a.x.video.max_height = std::stoi(need(i)); } catch (...) { die("--max-height needs a number"); }
     }
     else if (s == "-a" || s == "--audio-only") a.x.video.audio_only = true;
+    else if (s == "--clip") {
+      auto c = mg::clip_section(need(i));
+      if (!c) die("--clip needs a time or range, e.g. 1:00 or 2:30-3:30");
+      a.x.video.clip = *c;
+    }
+    else if (s == "--pace") a.x.video.pace = true;
     else if (s == "--playlist") a.x.video.playlist = true;
     else if (s == "--subs") a.x.video.write_subs = true;
     else if (s == "--info-json") a.x.video.write_info_json = true;
@@ -96,6 +105,7 @@ Args parse(int argc, char** argv) {
     else a.urls.push_back(s);
   }
   if (a.urls.empty()) { std::cerr << kUsage; std::exit(2); }
+  if (a.urls.size() > 1 || a.x.video.playlist) a.x.video.pace = true;
   a.x.out_root = a.out;
   return a;
 }

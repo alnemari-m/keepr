@@ -38,9 +38,9 @@ A C++20 compiler, CMake ≥ 3.20, libcurl and nlohmann-json. nlohmann-json is do
 
 ```bash
 # Arch
-sudo pacman -S --needed base-devel cmake ninja curl nlohmann-json qt6-base
+sudo pacman -S --needed base-devel cmake ninja curl nlohmann-json qt6-base qt6-multimedia
 # Debian / Ubuntu
-sudo apt install build-essential cmake ninja-build libcurl4-openssl-dev nlohmann-json3-dev qt6-base-dev
+sudo apt install build-essential cmake ninja-build libcurl4-openssl-dev nlohmann-json3-dev qt6-base-dev qt6-multimedia-dev
 ```
 
 ### 2. Build and install
@@ -90,7 +90,9 @@ keepr https://x.com/someone/status/123456789                   # X post (text + 
 keepr https://www.tiktok.com/@user/video/7059698374567611694   # TikTok
 keepr -q 720 https://youtu.be/...                              # cap at 720p
 keepr -a https://www.youtube.com/watch?v=...                   # audio only (mp3)
-keepr -i urls.txt -o ~/Archive                                 # batch from a file
+keepr --clip 1:00 https://youtu.be/...                         # only the first minute
+keepr --clip 2:30-3:30 https://youtu.be/...                    # only 2:30 to 3:30
+keepr -i urls.txt -o ~/Archive                                 # batch from a file (paced: waits 10-20 s between videos)
 keepr --cookies-from-browser firefox https://www.instagram.com/reel/...   # login-gated content
 ```
 
